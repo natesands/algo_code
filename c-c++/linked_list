@@ -1,0 +1,84 @@
+#include <iostream>
+#include "linked_list.h"
+using namespace std;
+
+
+int main() {
+  link<int> l0 = new node<int>();
+
+  
+  int N=10; link<int> l1 = new node<int>(0,nullptr);
+  link<int> l2 = new node<int>(10,nullptr);
+
+  link<int> x = l1;
+  link<int> y = l2;
+  for (size_t i=1; i < N; i++) {
+    x = (x->next = new node<int>(i,nullptr));
+    y = (y->next = new node<int>(N+i, nullptr));
+  }
+  printf("%s\n", list_to_str(l1).c_str());
+  printf("%s\n", list_to_str(l2).c_str());
+
+/******************* append *******************/
+
+
+  link<int> l2plusl1 = append(l2,l1);
+  printf("%s\n", list_to_str(l2plusl1).c_str());
+// link<int> l1plusl2 = rec_append(l1,l2);
+// printf("%s\n", list_to_str(l1plusl2).c_str());
+
+/******************* reverse *******************/
+  string s = "FTW";
+  link<string> sll = new node<string>(string(1,s[0]),nullptr);
+  link<string> xx = sll;
+  for (size_t i=1; i<s.length(); i++) 
+   xx = (xx->next = new node<string>(string(1, s[i]),nullptr)); 
+  xx = sll;
+  while (xx != nullptr) {
+    cout << xx->item << " ";
+    xx = xx->next;
+  }
+  xx = rec_reverse(sll);
+
+  while (xx != nullptr) {
+    cout << xx->item << " ";
+    xx = xx->next;
+  }
+
+/******************* sort *******************/
+
+  /* list of random integers */
+  node<int> heada; link<int> a=&heada, t=a;
+  for (size_t i=0; i < N; i++)
+  {
+    t = (t->next = new node<int>(rand() % 1000, nullptr));
+  }
+  printf("%s\n", list_to_str(a->next).c_str());
+
+  node<int> headb(0,nullptr);
+  link<int> z, u, b = &headb;
+  printf("Line 60\n");
+  /* invariant: list b contains the nodes from the 
+   * head of list a, up to but not including the node
+   * point to by t, in sorted order
+   */
+  t = a->next;
+  while (t != nullptr) {
+    /* invariant: x->next == nullptr or x->next->item > t->item */
+    u = t->next;
+    x = b;
+    printf("Line 70\n");
+    while (x->next != nullptr && x->next->item <= t->item)
+      x = x->next;
+    printf("Line 74\n");
+    t->next = x->next;
+    x->next = t;
+    t = u;
+    printf("%s\n", list_to_str(b).c_str());
+  }
+
+  printf("%s\n", list_to_str(b).c_str());
+}
+
+
+
